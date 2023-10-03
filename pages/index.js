@@ -4,16 +4,16 @@ import { useSession } from 'next-auth/react'
 
 export default function Home() {
   const {data: session} = useSession();
-  console.log(session)
+  console.log(session?.user)
   return(
     <Layout>
       <div className='text-slate-900 flex justify-between'>
         <h2>
-          Bienvenido, {session.user.name}
+          Bienvenido, {session?.user?.name}
         </h2>
-        <div className='rounded-lg flex bg-slate-900 text-white overflow-hidden'>
+        <div className='rounded-lg flex bg-blue text-white overflow-hidden'>
           <img src={session?.user?.image} alt='' className='rounded-lg w-10 h-10 mr-1'></img>
-          <span className='p-2'>{session.user.email}</span>
+          <span className='p-2'>{session?.user?.email}</span>
         </div>
         
       </div>
