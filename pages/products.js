@@ -53,14 +53,14 @@ export default function Products(){
                             <Link
                                                     //this +product._id comes from the database, is an default id 
                                 href={'/products/edit/'+product._id}
-                                className=" border border-white py-2 px-6 text-primary inline-block rounded bg-green text-white"
+                                className=" btn-green "
                                 >
                             Editar
                             </Link>
                             <Link
                                                     //this +product._id comes from the database, is an default id 
                                 href={'/products/delete/'+product._id}
-                                className=" border border-white py-2 px-6 text-primary inline-block rounded bg-red text-white"
+                                className="btn-red"
                                 >
                             Eliminar
                             </Link>

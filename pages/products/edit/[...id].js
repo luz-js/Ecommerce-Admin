@@ -23,7 +23,7 @@ export default function EditProductPage(){
 
     return(
         <Layout>
-          <h1>Editar producto</h1>
+          <h1 className="mb-8">Editar producto</h1>
           {productInfo && (
             <ProductForm {...productInfo} />
           )}
