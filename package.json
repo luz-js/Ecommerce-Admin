@@ -9,14 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@auth/mongodb-adapter": "^2.0.0",
+    "@auth/mongodb-adapter": "^2.1.0",
     "@aws-sdk/client-s3": "^3.435.0",
     "autoprefixer": "10.4.16",
     "axios": "^1.5.1",
+    "date": "^2.0.3",
+    "date-fns": "^3.2.0",
     "eslint": "8.50.0",
     "eslint-config-next": "13.5.3",
     "mime-types": "^2.1.35",
-    "mongodb": "^6.1.0",
+    "mongodb": "^6.3.0",
     "mongoose": "^7.5.3",
     "multiparty": "^4.2.3",
     "next": "13.5.3",

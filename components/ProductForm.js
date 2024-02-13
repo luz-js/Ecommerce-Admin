@@ -23,13 +23,16 @@ export default function ProductForm({
         const [isUploading, setIsUploading] = useState(false);
         const [images,setImages] = useState(existingImages || []);
         const [goToProducts, setGoToProducts] = useState(false)
+        const [categoriesLoading, setCategoriesLoading] = useState(false);
         const [categories,setCategories] = useState([]);
         const router = useRouter();
         console.log({_id})
 
         useEffect(() => {
+            setCategoriesLoading(true);
             axios.get('/api/categories').then(result => {
               setCategories(result.data);
+              setCategoriesLoading(false);
             })
           }, []);
 
@@ -122,6 +125,9 @@ export default function ProductForm({
                         <option key={c._id} value={c._id}>{c.name}</option>
                     ))}
                     </select>
+                    {categoriesLoading && (
+                        <Spinner />
+                    )}
                     {propertiesToFill.length > 0 && propertiesToFill.map(p => (
                         <div key={p.name} className="">
                             <label>{p.name[0].toUpperCase()+p.name.substring(1)}</label>
