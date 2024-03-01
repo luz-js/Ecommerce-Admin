@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import axios from "axios";
 import { withSwal } from 'react-sweetalert2';
 import Spinner from "@/components/Spinner";
+import Swal from 'sweetalert2';
 
 function Categories({swal}) {
   const [editedCategory, setEditedCategory] = useState(null);
@@ -23,6 +24,16 @@ function Categories({swal}) {
   }
   async function saveCategory(ev){
     ev.preventDefault();
+
+    if (!name.trim() || properties.some(p => !p.name.trim() || !p.values.trim())) {
+      swal.fire({
+        title: 'No se pueden guardar campos vacíos!',
+        text: 'Por favor, complete todos los campos y en caso de no tener propiedades hijas, presione el botón REMOVER',
+        icon: 'error',
+      });
+      return;
+    }
+
     const data = {
       name,
       parentCategory,
@@ -33,10 +44,20 @@ function Categories({swal}) {
     };
     if (editedCategory) {
       data._id = editedCategory._id;
-      await axios.put('/api/categories', data);
+      await axios.put('/api/categories', data).then(() => {
+        Swal.fire({
+            title: 'Categoría editada!',
+            icon: 'success',
+          });
+    });
       setEditedCategory(null);
     } else {
-      await axios.post('/api/categories', data);
+      await axios.post('/api/categories', data).then(() => {
+        Swal.fire({
+            title: 'Categoría agregada correctamente!',
+            icon: 'success',
+          });
+    });
     }
     setName('');
     setParentCategory('');
@@ -59,8 +80,8 @@ function Categories({swal}) {
       title: 'Estás seguro?',
       text: `Quieres eliminar ${category.name}?`,
       showCancelButton: true,
-      cancelButtonText: 'Cancelar',
-      confirmButtonText: 'Sí, Cancelar!',
+      cancelButtonText: 'No, cancelar',
+      confirmButtonText: 'Sí, eliminar!',
       confirmButtonColor: '#d55',
       reverseButtons: true,
     }).then(async result => {
@@ -126,8 +147,9 @@ function Categories({swal}) {
           <button
             onClick={addProperty}
             type="button"
-            className="btn-default text-sm mb-2">
-            Agregar nueva categoría
+            className="btn-default text-sm mb-2"
+            disabled={!name|| !name.trim()}>
+            Agregar nueva propiedad
           </button>
           {properties.length > 0 && properties.map((property,index) => (
             <div key={property.name} className="flex gap-1 mb-2">
@@ -167,7 +189,8 @@ function Categories({swal}) {
               className="btn-red">Cancelar</button>
           )}
           <button type="submit"
-                  className="btn-primary py-1 mb-5">
+                  className="btn-primary py-1 mb-5"
+                  disabled={!name || !name.trim()}>
             Guardar
           </button>
         </div>

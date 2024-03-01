@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Spinner from "./Spinner";
 import {ReactSortable} from "react-sortablejs";
+import Swal from 'sweetalert2';
 
 export default function ProductForm({
 // the rename of the const is because there is not confution between the validation
@@ -53,10 +54,20 @@ export default function ProductForm({
             const data = {title,description,price,images,category,properties:productProperties};
             if (_id) {
                 //update
-                await axios.put('/api/products', {...data, _id})
+                await axios.put('/api/products', {...data, _id}).then(() => {
+                    Swal.fire({
+                        title: 'Producto editado!',
+                        icon: 'success',
+                      });
+                })
             }else{
                 //create
-                await axios.post('/api/products', data);
+                await axios.post('/api/products', data).then(() => {
+                    Swal.fire({
+                        title: 'Producto creado correctamente!',
+                        icon: 'success',
+                      });
+                });
                 
             }
             setGoToProducts(true);
