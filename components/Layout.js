@@ -16,11 +16,6 @@ export default function Layout({children}) {
               <img class="w-6 h-6" src="https://www.svgrepo.com/show/475656/google-color.svg" loading="lazy" alt="google logo" />
               <span>Ingresar con Google</span>
           </button>
-          <button onClick={() => signIn('facebook')} class="px-6 py-2 mb-5 border flex gap-2 border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150">
-              <img class="w-6 h-6" src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/facebook-round-color-icon.png" loading="lazy" alt="google logo" />
-              <span>Ingresar con Facebook</span>
-          </button>
-
           <p className="mt-5 text-xs">Acceso permitido solo para administradores</p>
           <p className="text-xs">No se permite Registro</p>
         </div>
