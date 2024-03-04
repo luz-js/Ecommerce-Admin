@@ -19,7 +19,7 @@ label{
     @apply text-blue text-sm;
 }
 .btn-primary{
-    @apply bg-blue text-white px-4 py-1 rounded-sm shadow-sm;
+    @apply bg-blue text-white px-4 py-1 rounded-sm border border-blue shadow-sm transition duration-300 ease-in-out transform hover:scale-105;
 }
 table.basic{
     @apply w-full bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)];
@@ -35,15 +35,18 @@ table.basic tr td{
 table.basic a{
     @apply px-4 rounded-sm inline-flex mx-1 items-center gap-1 text-sm py-1;
 }
-.btn-default, .btn-red{
+.btn-default, .btn-red, .btn-primary-two{
     @apply px-4 py-1 rounded-md;
 }
 .btn-red{
-    @apply bg-red text-white px-4 py-1 rounded-sm shadow-sm;
+    @apply bg-red text-white px-4 py-1 rounded-sm shadow-sm transition duration-300 ease-in-out transform hover:scale-105;
 }
 .btn-gray{
-    @apply bg-gray text-white px-4 py-1 rounded-sm shadow-sm;
+    @apply bg-gray text-white px-4 py-1 rounded-sm shadow-sm transition duration-300 ease-in-out transform hover:scale-105;
 }
 .btn-default{
-    @apply bg-blue text-white px-4 py-1 rounded-sm border border-blue shadow-sm;
+    @apply bg-blue text-white px-4 py-1 rounded-sm border border-blue shadow-sm transition duration-300 ease-in-out transform hover:scale-105;
+}
+.btn-primary-two{
+    @apply bg-red text-white px-4 py-1 rounded-sm border border-blue shadow-sm transition duration-300 ease-in-out transform hover:scale-105;
 }

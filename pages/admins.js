@@ -4,6 +4,7 @@ import axios from "axios";
 import {withSwal} from "react-sweetalert2";
 import Spinner from "@/components/Spinner";
 import {prettyDate} from "@/lib/date";
+import Swal from 'sweetalert2';
 
 function AdminsPage({swal}) {
   const [email,setEmail] = useState('');
@@ -11,21 +12,34 @@ function AdminsPage({swal}) {
   const [isLoading,setIsLoading] = useState(false);
   function addAdmin(ev){
     ev.preventDefault();
-    axios.post('/api/admins', {email}).then(res => {
-      console.log(res.data);
-      swal.fire({
-        title: 'Admin Creado!',
-        icon: 'success',
-      });
-      setEmail('');
-      loadAdmins();
-    }).catch(err => {
-      swal.fire({
-        title: 'Error!',
-        text: err.response.data.message,
+
+    const emailExtension = email.split('@')[1];
+    if (emailExtension !== 'gmail.com') {
+      Swal.fire({
         icon: 'error',
+        title: 'Introduce un correo válido',
+        text: 'Recuerda que la extensión debe ser "Gmail.com".',
       });
-    });
+      return; // Detener la función si la extensión no es "gmail.com"
+    }else{
+      axios.post('/api/admins', {email}).then(res => {
+        console.log(res.data);
+        swal.fire({
+          title: 'Admin Creado!',
+          icon: 'success',
+        });
+        setEmail('');
+        loadAdmins();
+      }).catch(err => {
+        swal.fire({
+          title: 'Error!',
+          text: err.response.data.message,
+          icon: 'error',
+        });
+      });
+    }
+
+    
   }
   function deleteAdmin(_id, email) {
     swal.fire({
@@ -60,7 +74,7 @@ function AdminsPage({swal}) {
   }, []);
   return (
     <Layout>
-      <h1>Administradores</h1>
+      <h1 className="mb-8 text-3xl font-bold text-center text-blue mt-4 font-serif">Administradores</h1>
       <h2 className="mb-2">Agregar nuevo admin</h2>
       <form onSubmit={addAdmin}>
         <div className="flex gap-2 mb-5">
@@ -106,8 +120,8 @@ function AdminsPage({swal}) {
               <td>
                 <button
                   onClick={() => deleteAdmin(adminEmail._id, adminEmail.email)} 
-                  disabled={adminEmail.email === "luri1308@hotmail.com"} 
-                  className={adminEmail.email === "luri1308@hotmail.com" ? "btn-gray" : "btn-red"}>Borrar</button>
+                  disabled={adminEmail.email === "lurita1308@gmail.com"} 
+                  className={adminEmail.email === "lurita1308@gmail.com" ? "btn-gray" : "btn-red"}>Borrar</button>
               </td>
             </tr>
           ))}

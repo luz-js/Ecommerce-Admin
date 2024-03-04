@@ -2,6 +2,7 @@ import Layout from "@/components/Layout";
 import axios from "axios";
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react";
+import Swal from 'sweetalert2';
 
 export default function DeleteProductPage (){
 
@@ -24,7 +25,13 @@ export default function DeleteProductPage (){
     }
 
     const deleteProduct = async () => {
-        await axios.delete('/api/products?id='+id);
+        await axios.delete('/api/products?id='+id).then(() => {
+          Swal.fire({
+            title: 'Producto eliminado!',
+            icon: 'success',
+          });
+        });
+        
         goBack();
     }
 

@@ -6,7 +6,6 @@ import {ReactSortable} from "react-sortablejs";
 import Swal from 'sweetalert2';
 
 export default function ProductForm({
-// the rename of the const is because there is not confution between the validation
     _id,
     title:existingTitle,
     description:existingDescription,
@@ -54,25 +53,48 @@ export default function ProductForm({
             const data = {title,description,price,images,category,properties:productProperties};
             if (_id) {
                 //update
-                await axios.put('/api/products', {...data, _id}).then(() => {
+                if (title === '' || category === '' || description === '' || price === '') {
+                    // Mostrar alerta con SweetAlert
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Oops...',
+                        text: 'Por favor, completa todos los campos, incluido el de subir imagen.',
+                    });
+                    return; // Detener el envío del formulario
+                }else{
+                   await axios.put('/api/products', {...data, _id}).then(() => {
                     Swal.fire({
                         title: 'Producto editado!',
                         icon: 'success',
                       });
-                })
+                }) 
+                }
+                
             }else{
                 //create
-                await axios.post('/api/products', data).then(() => {
+                if (title === '' || category === '' || description === '' || price === '') {
+                    // Mostrar alerta con SweetAlert
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Oops...',
+                        text: 'Por favor, completa todos los campos, incluido el de subir imagen.',
+                    });
+                    return; // Detener el envío del formulario
+                }else{
+                  await axios.post('/api/products', data).then(() => {
                     Swal.fire({
                         title: 'Producto creado correctamente!',
                         icon: 'success',
                       });
-                });
+                });  
+                }
+                
                 
             }
             setGoToProducts(true);
         }
         //when we create the produtcs, this return us to de product page
+        //usamos el estado goToProducts para manejar el router
         if (goToProducts) {
              router.push('/products')
         }
@@ -99,6 +121,7 @@ export default function ProductForm({
             setImages(images);
         }
 
+        
         function setProductProp(propName,value) {
             setProductProperties(prev => {
               const newProductProps = {...prev};
@@ -117,6 +140,8 @@ export default function ProductForm({
             catInfo = parentCat;
           }
         }
+
+        
     
         return (
                 <form onSubmit={saveProduct}>
@@ -126,13 +151,12 @@ export default function ProductForm({
                         placeholder="TÍtulo" 
                         value={title} 
                         className="mt-2"
-                        onChange={onChangeTitle}/>
+                        onChange={onChangeTitle} />
                     <label>Categoría</label>
                     <select value={category}
                             className="mt-2"
                             onChange={ev => setCategory(ev.target.value)}>
-                        <option value="">Sin categoría padre</option>
-                        {categories.length > 0 && categories.map(c => (
+                        {categories.length > 0 && categories.filter(category => category.parent).map(c => (
                         <option key={c._id} value={c._id}>{c.name}</option>
                     ))}
                     </select>
@@ -157,16 +181,17 @@ export default function ProductForm({
                         </div>
                     ))}
                     <label>Fotos</label>
-                    <div className="mb-3 flex flex-wrap gap-1 mt-2">
+                    <div className="mb-4 flex flex-wrap gap-1 mt-2">
                         <ReactSortable
                             list={images}
                             className="flex flex-wrap gap-1"
                             setList={updateImagesOrder}>
-                            {!!images?.length && images.map(link => (
-                            <div key={link} className="h-24 bg-white p-2 shadow-sm rounded-sm border border-gray">
-                                <img src={link} alt="" className="rounded-lg"/>
+                            {!!images?.length && images.map((link, index) => (
+                            <div key={index} className="h-24 bg-white p-2 shadow-sm rounded-sm border border-gray">
+                                <img src={link} alt="" className="rounded-lg mb-5"/>
                             </div>
                             ))}
+                            
                         </ReactSortable>
                         {isUploading && (
                             <div className="h-24 flex items-center">

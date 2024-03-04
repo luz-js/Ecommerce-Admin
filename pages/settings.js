@@ -9,6 +9,7 @@ function SettingsPage({swal}) {
   const [featuredProductId, setFeaturedProductId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [shippingFee, setShippingFee] = useState('');
+  const [shippingFeeError, setShippingFeeError] = useState('');
 
   useEffect(() => {
     setIsLoading(true);
@@ -30,6 +31,10 @@ function SettingsPage({swal}) {
   }
 
   async function saveSettings() {
+    if (!shippingFee.trim()) {
+      setShippingFeeError('El campo "precio de venta" es obligatorio');
+      return;
+    }
     setIsLoading(true);
     await axios.put('/api/settings', {
       name: 'featuredProductId',
@@ -48,7 +53,7 @@ function SettingsPage({swal}) {
 
   return (
     <Layout>
-      <h1>Ajustes</h1>
+      <h1 className="mb-8 text-3xl font-bold text-center text-blue mt-4 font-serif">Ajustes</h1>
       {isLoading && (
         <Spinner />
       )}
@@ -63,8 +68,12 @@ function SettingsPage({swal}) {
           <label>Precio de venta (en pesos)</label>
           <input type="number"
                  value={shippingFee}
-                 onChange={ev => setShippingFee(ev.target.value)}
+                 onChange={ev => {setShippingFee(ev.target.value); setShippingFeeError('');}}
+                 required    
           />
+          {shippingFeeError && (
+            <div style={{ color: 'red', marginBottom: '10px' }}>{shippingFeeError}</div>
+          )}
           <div>
             <button onClick={saveSettings} className="btn-primary">Guardar ajustes</button>
           </div>

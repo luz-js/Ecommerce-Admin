@@ -120,7 +120,7 @@ function Categories({swal}) {
   }
   return (
     <Layout>
-      <h1>Categorias</h1>
+      <h1 className="mb-8 text-3xl font-bold text-center text-blue mt-4 font-serif">Categorías </h1>
       <label>
         {editedCategory
           ? `Editar categoría ${editedCategory.name}`
@@ -136,10 +136,10 @@ function Categories({swal}) {
           <select
                   onChange={ev => setParentCategory(ev.target.value)}
                   value={parentCategory}>
-            <option value="0">No categoría padre</option>
-            {categories.length > 0 && categories.map(category => (
-              <option key={category._id} value={category._id}>{category.name}</option>
-            ))}
+            <option value="0">Categoría padre</option>
+            {categories.length > 0 && categories.filter(category => !category.parent).map(category => (
+                <option key={category._id} value={category._id}>Categoría hija de: {category.name}</option>
+              ))}
           </select>
         </div>
         <div className="mb-2">
@@ -186,10 +186,10 @@ function Categories({swal}) {
                 setParentCategory('');
                 setProperties([]);
               }}
-              className="btn-red">Cancelar</button>
+              className="btn-primary-two py-1 mb-5">Cancelar</button>
           )}
           <button type="submit"
-                  className="btn-primary py-1 mb-5"
+                  className="btn-primary py-1 mb-5 transition duration-300 ease-in-out transform hover:scale-105"
                   disabled={!name || !name.trim()}>
             Guardar
           </button>
@@ -217,7 +217,7 @@ function Categories({swal}) {
           {categories.length > 0 && categories.map(category => (
             <tr key={category._id}>
               <td>{category.name}</td>
-              <td>{category?.parent?.name}</td>
+              <td>{category?.parent?.name ?? <p>Categoría padre</p>} </td>
               <td>
                 <button
                   onClick={() => editCategory(category)}
