@@ -10,13 +10,15 @@ export default function Nav() {
     const router = useRouter();
     //el pathname lo usamos para saber en que ruta estamos
     const {pathname} = router;
-    //con esta funcion usamos el singout de next-auth para cerrar sesion
-    //y usamos el router.push para redireccionarnos
-    async function logout() {
-        await router.push('/');
-        await signOut();
-    }
 
+    async function logout() {
+        localStorage.clear(); 
+        // Eliminar cookie
+        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        await signOut({ redirect: false }).then(() => {
+            router.push("/"); // Redirect to the home page after signing out
+          });
+    }
 
     return (
         <aside className="p-4 text-white overflow-hidden">

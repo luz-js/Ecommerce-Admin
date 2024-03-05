@@ -23,6 +23,7 @@ export const authOptions = {
       clientSecret: process.env.FACEBOOK_SECRET
     }),
   ],
+  secret: 'IamVeryHandsome',
   adapter: MongoDBAdapter(clientPromise),
   callbacks: {
     session: async ({session,token,user}) => {
