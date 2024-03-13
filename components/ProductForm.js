@@ -208,9 +208,9 @@ export default function ProductForm({
                             <input type="file" onChange={uploadImages} className="hidden"/>
                         </label>
                     </div>
-                    <label>Descripcion</label>
+                    <label>Descripción</label>
                     <textarea 
-                        placeholder="Descripcion" 
+                        placeholder="Descripción" 
                         value={description} 
                         onChange={onChangeDescription}
                         className="mt-2"

@@ -96,7 +96,7 @@ function AdminsPage({swal}) {
       <table className="basic">
         <thead>
           <tr>
-            <th className="text-left">Admin google email</th>
+            <th className="text-left">Admin</th>
             <th></th>
             <th></th>
           </tr>

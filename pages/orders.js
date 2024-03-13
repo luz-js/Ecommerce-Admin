@@ -57,44 +57,51 @@ const styles = StyleSheet.create({
 
 
 // Función para generar el PDF de una orden específica
-const generatePDF = (order) => (
+const generatePDF = (order, ship) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.section}>
-      <Text style={styles.header}>Factura Cliente DuoComp</Text>
+        <Text style={styles.header}>Factura Cliente DuoComp</Text>
         <Text style={styles.title}>Fecha: {(new Date(order.createdAt)).toLocaleString()}</Text>
         <Text style={styles.title}>Detalles:</Text>
         <Text style={styles.text}>Nombre: {order.name}</Text>
         <Text style={styles.text}>Email contacto: {order.email}</Text>
-        <Text style={styles.text}>Ciuda: {order.city} {order.country}</Text>
-        <Text style={styles.text}>Codigo postal: {order.postalCode} </Text>
+        <Text style={styles.text}>Ciudad: {order.city} {order.country}</Text>
+        <Text style={styles.text}>Código postal: {order.postalCode}</Text>
         <Text style={styles.text}>Dirección: {order.streetAddress}</Text>
         <View style={styles.divider} />
         <Text style={styles.title}>Productos:</Text>
         {order.line_items.map(item => (
-          <Text style={styles.text} key={item._id}>{item.price_data?.product_data.name} x{item.quantity}</Text>
+          <View key={item._id}>
+            <Text style={styles.text}>{item.price_data?.product_data.name} x{item.quantity}</Text>
+            <Text style={styles.text}>Precio unitario: ${item.price_data?.unit_amount / 100}</Text>
+            <View style={styles.divider} />
+          </View>
         ))}
-        <View style={styles.footer}>
-          <Text>Total: {calculateTotal(order.line_items)}</Text>
-        </View>
+        <Text style={styles.title}>Precio de envío:</Text>
+        <Text style={styles.text}>${ship}</Text>
+        <View style={styles.divider} />
+        <Text style={styles.footer}>Total: {calculateTotal(order.line_items, ship)}</Text>
       </View>
     </Page>
   </Document>
 );
 
+
 // Función para calcular el total de la orden
-const calculateTotal = (lineItems) => {
+const calculateTotal = (lineItems, ship) => {
   let total = 0;
   lineItems.forEach(item => {
     total += item.price_data.unit_amount * item.quantity;
   });
-  return `$${total / 100}`;
+  return `$${total / 100 + Number(ship)}`;
 };
 
 // Componente de la página de órdenes
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [shipping, setShipping] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -109,8 +116,19 @@ export default function OrdersPage() {
       });
   }, []);
 
+  useEffect(() => {
+    axios.get('/api/settings', {params: {name: 'shippingFee'}})
+      .then(response => {
+        setShipping(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching shipping:', error);
+      });
+  }, []);
+
   return (
     <Layout>
+      
       <h1 className="mb-8 text-3xl font-bold text-center text-blue mt-4 font-serif">Órdenes</h1>
       <table className="basic">
         <thead>
@@ -149,7 +167,7 @@ export default function OrdersPage() {
                 ))}
               </td>
               <td>
-                <PDFDownloadLink document={generatePDF(order)} fileName={`order_${order._id}.pdf`}   className="btn-primary px-4 py-2 rounded-md text-white font-semibold transition duration-300 ease-in-out transform hover:scale-105">
+                <PDFDownloadLink document={generatePDF(order, shipping.value)} fileName={`order_${order._id}.pdf`}   className="btn-primary px-4 py-2 rounded-md text-white font-semibold transition duration-300 ease-in-out transform hover:scale-105">
                   {({ loading }) => (loading ? 'Generando PDF...' : 'Imprimir factura(PDF)')}
                 </PDFDownloadLink>
               </td>

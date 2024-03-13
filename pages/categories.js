@@ -130,7 +130,7 @@ function Categories({swal}) {
         <div className="flex gap-1 mt-2 mb-5">
           <input
             type="text"
-            placeholder={'Category name'}
+            placeholder={'Nombre de categoría'}
             onChange={ev => setName(ev.target.value)}
             value={name}/>
           <select
@@ -152,21 +152,20 @@ function Categories({swal}) {
             Agregar nueva propiedad
           </button>
           {properties.length > 0 && properties.map((property,index) => (
-            <div key={property.name} className="flex gap-1 mb-2">
+            <div key={index} className="flex gap-1 mb-2">
               <input type="text"
                      value={property.name}
                      className="mb-0"
                      onChange={ev => handlePropertyNameChange(index,property,ev.target.value)}
-                     placeholder="property name (example: color)"/>
+                     placeholder="nombre propiedad (ejemplo: color)"/>
               <input type="text"
                      className="mb-0"
-                     onChange={ev =>
-                       handlePropertyValuesChange(
-                         index,
-                         property,ev.target.value
-                       )}
                      value={property.values}
-                     placeholder="values, comma separated"/>
+                     onChange={ev =>
+                       handlePropertyValuesChange(index,property,ev.target.value
+                       )}
+
+                     placeholder="valores, separados por coma"/>
               <button
                 onClick={() => removeProperty(index)}
                 type="button"
